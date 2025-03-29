@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.clientesApi.entities.Cliente;
+import com.example.clientesApi.entities.dtos.ClienteRequest;
+import com.example.clientesApi.entities.dtos.ClienteResponse;
 import com.example.clientesApi.services.ClienteService;
 
 import lombok.RequiredArgsConstructor;
@@ -24,25 +26,25 @@ public class ClienteController {
 	private final ClienteService clienteService;
 	
 	@PostMapping
-	public ResponseEntity<Cliente> registrarCliente(@RequestBody Cliente cliente) {
+	public ResponseEntity<Cliente> registrarCliente(@RequestBody ClienteRequest cliente) {
 		Cliente salvo = clienteService.salvar(cliente);
 		return ResponseEntity.ok().body(salvo);
 	}
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<Cliente> resgatarClientePorId(@PathVariable Long id){
-		Cliente cliente = clienteService.resgatarPorId(id);
+	public ResponseEntity<ClienteResponse> resgatarClientePorId(@PathVariable Long id){
+		ClienteResponse cliente = clienteService.resgatarPorId(id);
 		return ResponseEntity.ok().body(cliente);
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<Cliente>> resgatarTodosClientes() {
+	public ResponseEntity<List<ClienteResponse>> resgatarTodosClientes() {
 		var clientes = clienteService.resgatarTodos();
 		return ResponseEntity.ok().body(clientes);
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<Void> atualizarUsuarioPorId(@PathVariable Long id, @RequestBody Cliente clienteAtualizado) {
+	public ResponseEntity<Void> atualizarUsuarioPorId(@PathVariable Long id, @RequestBody ClienteRequest clienteAtualizado) {
 		clienteService.atualizarCliente(id, clienteAtualizado);
 		return ResponseEntity.noContent().build();
 	}
