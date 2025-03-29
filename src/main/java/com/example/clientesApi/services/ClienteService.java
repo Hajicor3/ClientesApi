@@ -2,13 +2,16 @@ package com.example.clientesApi.services;
 
 import java.util.List;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.example.clientesApi.entities.Cliente;
 import com.example.clientesApi.entities.dtos.ClienteRequest;
 import com.example.clientesApi.entities.dtos.ClienteResponse;
 import com.example.clientesApi.repositories.ClienteRepository;
+import com.example.clientesApi.services.exceptions.ResourceNotFoundException;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -27,16 +30,21 @@ public class ClienteService {
 	
 	@Transactional
 	public ClienteResponse resgatarPorId(Long id) {
-		Cliente cliente = clienteRepository.getReferenceById(id);
-		return ClienteResponse
-				.builder()
-				.cpf(cliente.getCpf())
-				.email(cliente.getEmail())
-				.id(cliente.getId())
-				.senha(cliente.getSenha())
-				.telefone(cliente.getTelefone())
-				.nome(cliente.getNome())
-				.build();
+		try {
+			Cliente cliente = clienteRepository.getReferenceById(id);
+			return ClienteResponse
+					.builder()
+					.cpf(cliente.getCpf())
+					.email(cliente.getEmail())
+					.id(cliente.getId())
+					.senha(cliente.getSenha())
+					.telefone(cliente.getTelefone())
+					.nome(cliente.getNome())
+					.build();
+		}
+		catch(EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id);
+		}
 	}
 	
 	@Transactional
@@ -54,10 +62,16 @@ public class ClienteService {
 				.toList();
 	}
 	
+	@Transactional
 	public void atualizarCliente (Long id, ClienteRequest clienteAtualizado) {
-		var clienteAntigo = clienteRepository.getReferenceById(id);
-		update(clienteAntigo,clienteAtualizado);
-		clienteRepository.save(clienteAntigo);
+		try {
+			var clienteAntigo = clienteRepository.getReferenceById(id);
+			update(clienteAntigo,clienteAtualizado);
+			clienteRepository.save(clienteAntigo);
+		}
+		catch(EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id);
+		}
 		
 	}
 	
