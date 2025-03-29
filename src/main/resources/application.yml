@@ -1,4 +1,7 @@
 spring:
+  profiles:
+    active:
+    - teste
   application:
     name: clientesapi
 

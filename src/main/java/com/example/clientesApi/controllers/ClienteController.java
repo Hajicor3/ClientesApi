@@ -1,9 +1,12 @@
 package com.example.clientesApi.controllers;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,8 +30,20 @@ public class ClienteController {
 	}
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<Cliente> resgatarClientePorId (@PathVariable Long id){
+	public ResponseEntity<Cliente> resgatarClientePorId(@PathVariable Long id){
 		Cliente cliente = clienteService.resgatarPorId(id);
 		return ResponseEntity.ok().body(cliente);
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<Cliente>> resgatarTodosClientes() {
+		var clientes = clienteService.resgatarTodos();
+		return ResponseEntity.ok().body(clientes);
+	}
+	
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<Void> atualizarUsuarioPorId(@PathVariable Long id, @RequestBody Cliente clienteAtualizado) {
+		clienteService.atualizarCliente(id, clienteAtualizado);
+		return ResponseEntity.noContent().build();
 	}
 }
