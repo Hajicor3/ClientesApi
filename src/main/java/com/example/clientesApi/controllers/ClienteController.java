@@ -16,6 +16,9 @@ import com.example.clientesApi.entities.dtos.ClienteRequest;
 import com.example.clientesApi.entities.dtos.ClienteResponse;
 import com.example.clientesApi.services.ClienteService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -24,25 +27,42 @@ import lombok.RequiredArgsConstructor;
 public class ClienteController {
 	
 	private final ClienteService clienteService;
-	
+	@Operation(description = "Salva um Cliente no banco de dados.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Salva um cliente."),
+			@ApiResponse(responseCode = "400", description = "Parametros inválidos.")
+	})
 	@PostMapping
 	public ResponseEntity<Cliente> registrarCliente(@RequestBody ClienteRequest cliente) {
 		Cliente salvo = clienteService.salvar(cliente);
 		return ResponseEntity.ok().body(salvo);
 	}
 	
+	@Operation(description = "Resgata um cliente do banco de dados pelo id.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Retorna um cliente."),
+			@ApiResponse(responseCode = "404", description = "Não existe cliente no id informado.")
+	})
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<ClienteResponse> resgatarClientePorId(@PathVariable Long id){
 		ClienteResponse cliente = clienteService.resgatarPorId(id);
 		return ResponseEntity.ok().body(cliente);
 	}
 	
+	@Operation(description = "Resgata uma lista de todos os clientes do banco de dados.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Retorna uma lista de clientes.") })
 	@GetMapping
 	public ResponseEntity<List<ClienteResponse>> resgatarTodosClientes() {
 		var clientes = clienteService.resgatarTodos();
 		return ResponseEntity.ok().body(clientes);
 	}
 	
+	@Operation(description = "Atualiza um cliente no banco de dados pelo id.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Efetua a atualização do cliente."),
+			@ApiResponse(responseCode = "404", description = "Não existe cliente no id informado."),
+			@ApiResponse(responseCode = "400", description = "Parametros inválidos.")
+	})
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<Void> atualizarUsuarioPorId(@PathVariable Long id, @RequestBody ClienteRequest clienteAtualizado) {
 		clienteService.atualizarCliente(id, clienteAtualizado);
