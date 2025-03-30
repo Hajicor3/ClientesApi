@@ -32,31 +32,45 @@ public class Cliente implements Serializable {
 	private String telefone;
 	
 	public Cliente(String nome, String cpf, String email, String senha, String telefone) {
-		super();
-		this.nome = nome;
-		this.cpf = cpf;
-		this.email = email;
-		this.senha = senha;
-		this.telefone = telefone;
+		setNome(nome);
+		setCpf(cpf);
+		setEmail(email);
+		setSenha(senha);
+		setTelefone(telefone);
 	}
 
 	public void setNome(String nome) {
+		if(nome == null || nome.trim().length() < 3) {
+			throw new IllegalArgumentException("O nome não pode ser nulo e deve ter pelo menos 3 caracteres!");
+		}
 		this.nome = nome;
 	}
 
 	public void setCpf(String cpf) {
+		if (cpf == null || !cpf.trim().matches("\\d{11}")){
+			throw new IllegalArgumentException("Cpf inválido !");
+		}
 		this.cpf = cpf;
 	}
 
 	public void setEmail(String email) {
-		this.email = email;
+		if(email == null || !email.trim().matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+			throw new IllegalArgumentException("Email inválido");
+		}
+		this.email =  email;
 	}
 
 	public void setSenha(String senha) {
+		if(senha == null || senha.trim().isEmpty()){
+			throw new IllegalArgumentException("Senha inválida! A senha não pode ser vazia.");
+		}
 		this.senha = senha;
 	}
 
 	public void setTelefone(String telefone) {
+		if(telefone == null || !telefone.trim().isEmpty()) {
+			throw new IllegalArgumentException("Telefone inválido!");
+		}
 		this.telefone = telefone;
 	}
 }

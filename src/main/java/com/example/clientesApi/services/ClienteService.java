@@ -2,7 +2,6 @@ package com.example.clientesApi.services;
 
 import java.util.List;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.example.clientesApi.entities.Cliente;

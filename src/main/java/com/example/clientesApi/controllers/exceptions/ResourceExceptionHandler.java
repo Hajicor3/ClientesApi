@@ -21,4 +21,12 @@ public class ResourceExceptionHandler {
 		StandardError  erro = new StandardError(Instant.now(),status.value(),error,request.getRequestURI(),e.getMessage());
 		return ResponseEntity.status(status).body(erro);
 	}
+	
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<StandardError> illegalArgument(IllegalArgumentException e, HttpServletRequest request) {
+		String error = "Request inválido!";
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		StandardError  erro = new StandardError(Instant.now(),status.value(),error,request.getRequestURI(),e.getMessage());
+		return ResponseEntity.status(status).body(erro);
+	}
 }
