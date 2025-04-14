@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.clientesApi.entities.Cliente;
 import com.example.clientesApi.entities.dtos.ClienteRequest;
 import com.example.clientesApi.entities.dtos.ClienteResponse;
+import com.example.clientesApi.entities.dtos.PedidoRequest;
 import com.example.clientesApi.services.ClienteService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,6 +37,12 @@ public class ClienteController {
 	public ResponseEntity<Cliente> registrarCliente(@RequestBody ClienteRequest cliente) {
 		Cliente salvo = clienteService.salvar(cliente);
 		return ResponseEntity.ok().body(salvo);
+	}
+	
+	@PostMapping(value = "/pedido")
+	public ResponseEntity<Void> registrarPedido(@RequestBody PedidoRequest pedido) {
+		clienteService.salvarPedido(pedido);
+		return ResponseEntity.noContent().build();
 	}
 	
 	@Operation(description = "Resgata um cliente do banco de dados pelo id.")

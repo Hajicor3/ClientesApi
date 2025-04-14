@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 import com.example.clientesApi.entities.Cliente;
 import com.example.clientesApi.entities.dtos.ClienteRequest;
 import com.example.clientesApi.entities.dtos.ClienteResponse;
+import com.example.clientesApi.entities.dtos.PedidoRequest;
 import com.example.clientesApi.repositories.ClienteRepository;
+import com.example.clientesApi.repositories.feign.PedidoRepository;
 import com.example.clientesApi.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -19,12 +21,17 @@ import lombok.RequiredArgsConstructor;
 public class ClienteService {
 	
 	private final ClienteRepository clienteRepository;
+	private final PedidoRepository pedidoRepository;
 	
 	@Transactional
 	public Cliente salvar(ClienteRequest cliente) {
 		Cliente clienteSalvo = new Cliente(cliente.getNome(),cliente.getCpf(),cliente.getEmail(),cliente.getSenha(),cliente.getTelefone());
 		clienteRepository.save(clienteSalvo);
 		return clienteSalvo;
+	}
+	
+	public void salvarPedido(PedidoRequest pedido) {
+		pedidoRepository.criarPedido(pedido);
 	}
 	
 	@Transactional

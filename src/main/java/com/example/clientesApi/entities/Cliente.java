@@ -68,7 +68,7 @@ public class Cliente implements Serializable {
 	}
 
 	public void setTelefone(String telefone) {
-		if(telefone == null || !telefone.trim().isEmpty()) {
+		if(telefone == null || telefone.trim().isEmpty()) {
 			throw new IllegalArgumentException("Telefone inválido!");
 		}
 		this.telefone = telefone;

@@ -3,7 +3,7 @@ spring:
     active:
     - teste
   application:
-    name: clientesapi
+    name: apiclientes
 
 server:
   port: 8082
