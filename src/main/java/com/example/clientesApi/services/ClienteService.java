@@ -11,7 +11,9 @@ import com.example.clientesApi.entities.dtos.PedidoRequest;
 import com.example.clientesApi.repositories.ClienteRepository;
 import com.example.clientesApi.repositories.feign.PedidoRepository;
 import com.example.clientesApi.services.exceptions.ResourceNotFoundException;
+import com.example.clientesApi.services.exceptions.feignexceptions.FeignExceptionHandler;
 
+import feign.FeignException.FeignClientException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +33,12 @@ public class ClienteService {
 	}
 	
 	public void salvarPedido(PedidoRequest pedido) {
-		pedidoRepository.criarPedido(pedido);
+		try {
+			pedidoRepository.criarPedido(pedido);
+		}
+		catch(FeignClientException e) {
+			throw new FeignExceptionHandler(e.status(), e.getMessage());
+		}
 	}
 	
 	@Transactional
