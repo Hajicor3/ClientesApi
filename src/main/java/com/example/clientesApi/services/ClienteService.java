@@ -26,10 +26,18 @@ public class ClienteService {
 	private final PedidoRepository pedidoRepository;
 	
 	@Transactional
-	public Cliente salvar(ClienteRequest cliente) {
+	public ClienteResponse salvar(ClienteRequest cliente) {
 		Cliente clienteSalvo = new Cliente(cliente.getNome(),cliente.getCpf(),cliente.getEmail(),cliente.getSenha(),cliente.getTelefone());
-		clienteRepository.save(clienteSalvo);
-		return clienteSalvo;
+		var response = clienteRepository.save(clienteSalvo);
+		return ClienteResponse
+				.builder()
+				.cpf(response.getCpf())
+				.email(response.getEmail())
+				.id(response.getId())
+				.nome(response.getNome())
+				.senha(response.getSenha())
+				.telefone(response.getTelefone())
+				.build();
 	}
 	
 	public void salvarPedido(PedidoRequest pedido) {

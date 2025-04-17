@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.clientesApi.entities.Cliente;
 import com.example.clientesApi.entities.dtos.ClienteRequest;
 import com.example.clientesApi.entities.dtos.ClienteResponse;
 import com.example.clientesApi.entities.dtos.PedidoRequest;
@@ -34,8 +33,8 @@ public class ClienteController {
 			@ApiResponse(responseCode = "400", description = "Parametros inválidos.")
 	})
 	@PostMapping
-	public ResponseEntity<Cliente> registrarCliente(@RequestBody ClienteRequest cliente) {
-		Cliente salvo = clienteService.salvar(cliente);
+	public ResponseEntity<ClienteResponse> registrarCliente(@RequestBody ClienteRequest cliente) {
+		ClienteResponse salvo = clienteService.salvar(cliente);
 		return ResponseEntity.ok().body(salvo);
 	}
 	
