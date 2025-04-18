@@ -1,5 +1,6 @@
 package com.example.clientesApi.controllers;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -10,10 +11,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.clientesApi.entities.dtos.ClienteRequest;
 import com.example.clientesApi.entities.dtos.ClienteResponse;
 import com.example.clientesApi.entities.dtos.PedidoRequest;
+import com.example.clientesApi.entities.dtos.PedidoResponse;
 import com.example.clientesApi.services.ClienteService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class ClienteController {
 	
 	private final ClienteService clienteService;
+	
 	@Operation(description = "Salva um Cliente no banco de dados.")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Salva um cliente."),
@@ -38,10 +42,17 @@ public class ClienteController {
 		return ResponseEntity.ok().body(salvo);
 	}
 	
+	@Operation(description = "Salva um Pedido de um cliente no banco de dados.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Salva um pedido."),
+			@ApiResponse(responseCode = "400", description = "Parametros inválidos.")
+	})
 	@PostMapping(value = "/pedido")
-	public ResponseEntity<Void> registrarPedido(@RequestBody PedidoRequest pedido) {
-		clienteService.salvarPedido(pedido);
-		return ResponseEntity.noContent().build();
+	public ResponseEntity<PedidoResponse> registrarPedido(@RequestBody PedidoRequest pedido) {
+		var response  = clienteService.salvarPedido(pedido);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(response.getId()).toUri();
+		
+		return ResponseEntity.created(uri).body(response);
 	}
 	
 	@Operation(description = "Resgata um cliente do banco de dados pelo id.")
@@ -50,7 +61,7 @@ public class ClienteController {
 			@ApiResponse(responseCode = "404", description = "Não existe cliente no id informado.")
 	})
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<ClienteResponse> resgatarClientePorId(@PathVariable Long id){
+	public ResponseEntity<ClienteResponse> resgatarClientePorId(@PathVariable Long id) {
 		ClienteResponse cliente = clienteService.resgatarPorId(id);
 		return ResponseEntity.ok().body(cliente);
 	}

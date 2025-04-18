@@ -8,6 +8,7 @@ import com.example.clientesApi.entities.Cliente;
 import com.example.clientesApi.entities.dtos.ClienteRequest;
 import com.example.clientesApi.entities.dtos.ClienteResponse;
 import com.example.clientesApi.entities.dtos.PedidoRequest;
+import com.example.clientesApi.entities.dtos.PedidoResponse;
 import com.example.clientesApi.repositories.ClienteRepository;
 import com.example.clientesApi.repositories.feign.PedidoRepository;
 import com.example.clientesApi.services.exceptions.ResourceNotFoundException;
@@ -40,9 +41,10 @@ public class ClienteService {
 				.build();
 	}
 	
-	public void salvarPedido(PedidoRequest pedido) {
+	public PedidoResponse salvarPedido(PedidoRequest pedido) {
 		try {
-			pedidoRepository.criarPedido(pedido);
+			
+			return pedidoRepository.criarPedido(pedido).getBody();
 		}
 		catch(FeignClientException e) {
 			throw new FeignExceptionHandler(e.status(), e.getMessage());
