@@ -11,3 +11,7 @@ spring:
       ddl-auto: update
     generate-ddl: true
     show-sql: true
+
+api:
+ pedidos:
+  url: ${API_PEDIDOS_URL}

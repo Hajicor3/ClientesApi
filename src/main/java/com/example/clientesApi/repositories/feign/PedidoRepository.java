@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.example.clientesApi.entities.dtos.PedidoRequest;
 import com.example.clientesApi.entities.dtos.PedidoResponse;
 
-@FeignClient(name = "apipedidos", url = "http://localhost:8083/pedidos")
+@FeignClient(name = "apipedidos", url = "${api.pedidos.url}")
 public interface PedidoRepository {
 	
 	@PostMapping

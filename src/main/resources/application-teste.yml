@@ -12,3 +12,7 @@ spring:
     properties:
       hibernate:
         formater-sql: true
+
+api:
+  pedidos:
+    url: http://localhost:8083/pedidos
