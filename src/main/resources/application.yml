@@ -1,7 +1,7 @@
 spring:
   profiles:
     active:
-    - teste
+    - ${SPRING_APPLICATION_PROFILE:teste}
   application:
     name: apiclientes
 
